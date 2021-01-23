@@ -1,0 +1,45 @@
+race_msh = msh[["S#",'Race','Total victims']]
+race_msh
+race_msh = race_msh.replace('white','White')
+race_msh = race_msh.replace('White American or European American', 'White')
+race_msh = race_msh.replace('White American or European American/Some other Race', 'White')
+race_msh = race_msh.replace('black','Black')
+race_msh = race_msh.replace('Black American or African American','Black')
+race_msh = race_msh.replace('Black American or African American/Unknown','Black')
+race_msh = race_msh.replace('Asian American','Asian')
+race_msh = race_msh.replace('Asian American/Some other race','Asian')
+race_msh = race_msh.replace('Some other race','Other')
+race_msh
+# race_msh.groupby('Race').count()
+
+# race_counter = race_msh.groupby('Race').count() #Z tego nie można już korzystać bo zdarzył sie wypadek na danych
+race_victims =race_msh.groupby(['Race']).sum()[['Total victims']]
+race_counter2 = race_msh[['Race','S#']].groupby('Race').count()
+# race_counter2
+race_victims
+summary_race_msh = msh[['Race', 'S#', "Summary", 'Title']]
+summary_race_msh
+one_race = msh[['Race']]
+two_or_more=one_race == 'Two or more races'
+summary_race_msh.loc[summary_race_msh['Race'] == 'Two or more races']
+
+race_dict = {'Asian':18,'Black':87,'Latino':5,'Native American or Alaska Native':3,'Other':23,'Unknown':42,'White':144}
+race_df = pd.Series(race_dict)
+plt.figure(figsize=(20,10))
+plt.bar(range(len(race_df)), race_df.values, align='center')
+plt.xticks(range(len(race_df)),race_df.index.values, size='medium')
+plt.show()
+plt.figure(figsize=(15,10))
+my_colors = ['gold', 'blue', 'red', 'green', 'black','purple','brown','orange']
+
+plt.scatter(race_counter2['S#'], race_victims['Total victims'], s =100, c=my_colors)
+# plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+plt.text(140, 2050, 'White',c='orange')
+plt.text(85, 600, 'Black',c='blue')
+plt.text(40, 250, 'Unknown',c='brown')
+plt.text(20, 300, 'Other',c='black')
+plt.text(15, 250, 'Asian',c='gold')
+plt.text(6, 70, 'Latino', c='red')
+plt.text(0, 70, 'Native',c='green')
+plt.text(-4, -30, 'Two or more',c='purple')
+plt.show()
