@@ -1,0 +1,49 @@
+gender_msh = msh[['S#','Gender', 'Injured','Fatalities','Total victims']]
+gender_msh = gender_msh.replace('M','Male')
+gender_msh
+garry = gender_msh.groupby(['Gender']).sum()[['Injured','Fatalities','Total victims']]
+gender_msh.groupby(['Gender']).sum()[['Injured','Fatalities','Total victims']]
+summary_gender_msh = msh[['Gender', 'S#', "Summary", 'Title']]
+# summary_gender_msh
+# one_race = msh[['Race']]
+# two_or_more=one_race == 'Two or more races'
+summary_gender_msh.loc[summary_gender_msh['Gender'] == 'M/F']
+summary_gender_msh.iloc[80,2] 
+summary_gender_msh.loc[summary_gender_msh['Gender'] == 'Male/Female']
+summary_gender_msh.iloc[81,2]
+summary_gender_msh.iloc[136,2] 
+summary_gender_msh.iloc[152,2]
+summary_gender_msh.iloc[213,2] 
+garry.drop(garry.index[1], inplace=True)
+garry
+gender_amount =gender_msh[['S#','Gender']].groupby(['Gender']).count()
+# gender_amount.groupby(['Gender']).count()
+gender_amount.drop(gender_amount.index[1], inplace=True)
+gender_amount
+gender_dict ={'Female':5,'Male':298,'Male/Female':4,'Unknown':21}
+gender_df = pd.Series(gender_dict)
+plt.figure(figsize=(15,7))
+plt.bar(range(len(gender_df)), gender_df.values, align='center')
+plt.xticks(range(len(gender_df)),gender_df.index.values, size='medium')
+plt.show()
+gender_killed = gender_msh[['Gender','Injured','Fatalities']]
+gender_female =gender_killed.loc[gender_killed['Gender'] == 'Female']
+# gender_female
+
+# gender_male =gender_killed.loc[gender_killed['Gender'] == 'Male']
+gender_male2= gender_killed.loc[gender_killed['Gender'] == 'Male']
+gender_male2 = gender_male2[gender_male2['Injured'] != 527]
+gender_male_female = gender_killed.loc[gender_killed['Gender'] == 'Male/Female']
+gender_unknown=gender_killed.loc[gender_killed['Gender'] == 'Unknown']
+gender_female
+#Dorobić wykresy z dużym rekordem i ewentualnie jeszcze wykresy
+plt.figure(figsize=(15,7))
+ax = plt.gca()
+size = 30
+ax.scatter(gender_female['Injured'],gender_female['Fatalities'], label='female', color ='black', s = size, alpha= 0.9)
+ax.scatter(gender_male2['Injured'], gender_male2['Fatalities'], label='male', color='gold', s = size, alpha= 0.7)
+ax.scatter(gender_male_female['Injured'], gender_male_female['Fatalities'], color="red", label='male/female', s = size, alpha= 0.7)
+ax.scatter(gender_unknown['Injured'],gender_unknown['Fatalities'], color="green", label='unknown', s = size, alpha= 0.7)
+plt.legend(loc='upper left')
+plt.xlabel('Total victims and injured depended on gender')
+plt.show()
